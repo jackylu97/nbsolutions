@@ -1,15 +1,13 @@
 define([
   'base/js/namespace',
   'notebook/js/celltoolbar',
-  'jquery',
-  'notebook/js/codecell',
-  'base/js/events',
-], function(Jupyter, celltoolbar, $, codecell, events) {
+], function(Jupyter, celltoolbar) {
   'use strict';
 
   var CellToolbar = celltoolbar.CellToolbar;
-
   var toolbar_preset_name = 'Student Solutions';
+  var solutions_visible = true;
+
   var solutions_ui_callback = CellToolbar.utils.checkbox_ui_generator(
     'Hide From Students',
     function setter (cell, value) {
@@ -36,8 +34,30 @@ define([
 
   };
 
+  function toggle_solution_visibility() {
+    var cells = Jupyter.notebook.get_cells();
+    solutions_visible = !solutions_visible;
+    for (var i = 0; i < cells.length; i++) {
+      if (cells[i].metadata.hide_from_student) {
+        if (!solutions_visible) {
+          cells[i].element.addClass('hidden');
+        }
+        else {
+          cells[i].element.removeClass('hidden');
+        }
+      }
+    }
+  }
+
+  var action = {
+    'label'   : 'Student View',
+    'icon'    : 'fa fa-rocket',
+    'callback': toggle_solution_visibility
+  };
+
   var load_extension = function() {
     register(Jupyter.notebook);
+    Jupyter.toolbar.add_buttons_group([action]);
   };
 
   var extension = {
