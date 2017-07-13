@@ -1,39 +1,50 @@
 define([
   'base/js/namespace',
   'notebook/js/celltoolbar',
-  'jquery'
-], function(Jupyter, celltoolbar, $) {
+  'jquery',
+  'notebook/js/codecell',
+  'base/js/events',
+], function(Jupyter, celltoolbar, $, codecell, events) {
   'use strict';
 
   var CellToolbar = celltoolbar.CellToolbar;
 
-  // first param reference to a DOM div
-  // second param reference to the cell.
-  var toggle =  function(div, cell) {
-    var button_container = $('div');
+  var toolbar_preset_name = 'Student Solutions';
+  var solutions_ui_callback = CellToolbar.utils.checkbox_ui_generator(
+    'Hide From Students',
+    function setter (cell, value) {
+      if (value) {
+        cell.metadata.hide_from_student = true;
+      }
+      else {
+        delete cell.metadata.hide_from_student;
+      }
+    },
+    function getter (cell) {
+        // if init_cell is undefined, it'll be interpreted as false anyway
+      return cell.metadata.hide_from_student;
+    }
+  );
 
-    // let's create a button that show the  current value of the metadata
-    var button = $('<div/>').button({label:String(cell.metadata.foo)});
+  var register = function(notebook) {
+    CellToolbar.register_callback('nbsolutions.is_solution', solutions_ui_callback);
 
-    // On click, change the metadata value and update the button label
-    button.click(function(){
-      var v = cell.metadata.foo;
-      cell.metadata.foo = !v;
-      button.button("option", "label", String(!v));
-    })
+    var attachments_preset = [];
+    attachments_preset.push('nbsolutions.is_solution');
 
-    // add the button to the DOM div.
-    button_container.append(button);
+    CellToolbar.register_preset(toolbar_preset_name, attachments_preset, notebook);
+
   };
 
   var load_extension = function() {
-    CellToolbar.register_callback('foo', toggle);
+    register(Jupyter.notebook);
   };
 
   var extension = {
     load_jupyter_extension : load_extension,
     load_ipython_extension : load_extension
   };
+
   return extension;
 
 });
