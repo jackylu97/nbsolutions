@@ -11,16 +11,26 @@ define([
   var solutions_ui_callback = CellToolbar.utils.checkbox_ui_generator(
     'Hide From Students',
     function setter (cell, value) {
+      if (cell.metadata.tags === undefined) {
+        cell.metadata.tags = [];
+      }
       if (value) {
-        cell.metadata.hide_from_student = true;
+        cell.metadata.tags.push('hide_from_student');
       }
       else {
-        delete cell.metadata.hide_from_student;
+        var index = cell.metadata.tags.indexOf('hide_from_student');
+        if (index > -1) {
+          cell.metadata.tags.splice(index,1);
+        }
       }
     },
     function getter (cell) {
-        // if init_cell is undefined, it'll be interpreted as false anyway
-      return cell.metadata.hide_from_student;
+      if (cell.metadata.tags === undefined) {
+        return false;
+      }
+      else {
+        return cell.metadata.tags.indexOf('hide_from_student') > -1;
+      }
     }
   );
 
@@ -38,7 +48,12 @@ define([
     var cells = Jupyter.notebook.get_cells();
     solutions_visible = !solutions_visible;
     for (var i = 0; i < cells.length; i++) {
-      if (cells[i].metadata.hide_from_student) {
+      // ignore cells without tags
+      if (cells[i].metadata.tags === undefined) {
+        continue;
+      }
+
+      if (cells[i].metadata.tags.indexOf('hide_from_student') > -1) {
         if (!solutions_visible) {
           cells[i].element.addClass('hidden');
         }
