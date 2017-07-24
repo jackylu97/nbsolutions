@@ -66,7 +66,7 @@ define([
 
   var action = {
     'label'   : 'Student View',
-    'icon'    : 'fa fa-rocket',
+    'icon'    : 'fa fa-university',
     'callback': toggle_solution_visibility
   };
 
