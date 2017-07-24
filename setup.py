@@ -4,8 +4,10 @@ setuptools.setup(
     name="nbsolutions",
     version='0.1.0',
     author="Jacky Lu",
-    url="https://github.com/jackylu97/nbsolutions"
-    description="Simple Jupyter extension that allows the user to mark cells as 'solution' cells not meant to be viewed by students.",
+    author_email="jackylu97@gmail.com",
+    url="https://github.com/jackylu97/nbsolutions",
+    download_url="https://github.com/jackylu97/nbsolutions/archive/0.1.0.tar.gz",
+    description="Simple Jupyter extension that allows the user to mark solution cells",
     packages= ["nbsolutions"],
     install_requires=[
         'notebook',
