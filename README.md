@@ -1,6 +1,6 @@
 # nbsolutions
 
-![Screenshot](screenshot.png)
+![Screenshot](Screenshot.png)
 
 NB Solutions is a Jupyter notebook extension that allows the user to mark cells
 as 'solution' cells not meant to be viewed by students. It also adds a toolbar
