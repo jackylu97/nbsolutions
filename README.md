@@ -9,15 +9,15 @@ notebook. Accessed through View -> Cell Toolbar -> Student Solutions.
 
 ## Installation
 
-Using pip:
+Using pip (add --sys-prefix if installing in local environment):
 
 ```
 pip install nbsolutions
-jupyter nbextension install --py nbresuse
+jupyter nbextension install --py nbsolutions (--sys-prefix)
 ```
 
 To enable this extension for all notebooks:
 
 ```
-jupyter nbextension enable --py nbresuse
+jupyter nbextension enable --py nbsolutions (--sys-prefix)
 ```
